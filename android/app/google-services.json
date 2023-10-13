@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "923898097082",
+    "project_id": "medshop-47c24",
+    "storage_bucket": "medshop-47c24.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:923898097082:android:3cf55c8b23c070a97e8183",
+        "android_client_info": {
+          "package_name": "com.medical.medshop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNwC1SVGO_v2iV1NgCujAEkyy1eEHolc8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

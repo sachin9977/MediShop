@@ -34,3 +34,9 @@ const List genderstxt = ['Male', 'Female', 'Others'];
 const String chkbox1 = 'I am above 18 years old';
 const String chkbox2 = 'I accept all Term of policy and Privacy policy';
 const String profileUpdatebtn = 'UPDATE';
+
+
+// NotificationScreen Text
+
+const String notiApptxt = 'Notification';
+const String zeronotitxt = 'Notification are not available';

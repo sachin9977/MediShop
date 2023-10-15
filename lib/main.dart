@@ -10,7 +10,7 @@ void main() async {
   } catch (e) {
     print('Error initializing Firebase: $e');
   }
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 
@@ -21,10 +21,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-      ),
+      title: 'MedShop',
+      // theme: ThemeData(
+      //   primarySwatch: Colors.teal,
+      // ),
       home: Splash(),
     );
   }

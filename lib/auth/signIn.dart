@@ -1,10 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:medshop/auth/otpScreen.dart';
 
 import '../config/constant.dart';
 import '../widgets/customButton.dart';
 import '../widgets/customTextField.dart';
+import 'otpScreen.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -14,25 +13,7 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  Future<void> sendOTP(String phoneNumber) async {
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      verificationCompleted: (PhoneAuthCredential credential) {
-        // Auto verification, if the phone number is automatically detected
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        // Handle verification failure
-      },
-      codeSent: (String verificationId, int? resendToken) {
-        // Save verification ID for later use
-        // Typically, this is sent to another screen for OTP entry
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        // Called when the automatic code retrieval time has passed
-      },
-    );
-  }
-
+  TextEditingController number = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,16 +53,23 @@ class _SignInState extends State<SignIn> {
               ),
               SizedBox(
                   height: MediaQuery.of(context).size.height / 8,
-                  child: CircularTextField()),
+                  child: CircularTextField(
+                    hintText: hinttxt,
+                    controller: number,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
+                  )),
               SizedBox(
                   height: MediaQuery.of(context).size.height / 8,
                   child: InkWell(
-                      onTap: () => sendOTP('9977184307'),
-                      // onTap: () => Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => const OtpScreen(),
-                      //     )),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => OtpScreen(),
+                            ));
+                      },
                       child: const CustomButtom(
                         '$otpbtnText',
                       ))),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:medshop/auth/profilesetup.dart';
 import 'package:medshop/config/constant.dart';
 import 'package:medshop/widgets/customButton.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
-import '../BottomBar.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key});
@@ -14,6 +14,7 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
+   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,15 +88,13 @@ class _OtpScreenState extends State<OtpScreen> {
                 height: 40,
               ),
               OTPTextField(
-                length: 4,
-                width: MediaQuery.of(context).size.width / 1.2,
-                fieldWidth: 60,
+                length: 6,
+                width: MediaQuery.of(context).size.width / 1,
+                fieldWidth: 50,
                 style: const TextStyle(fontSize: 17),
                 textFieldAlignment: MainAxisAlignment.spaceAround,
                 fieldStyle: FieldStyle.box,
-                onCompleted: (pin) {
-                  print("Completed: " + pin);
-                },
+             
               ),
               const SizedBox(
                 height: 40,
@@ -122,7 +121,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>  AnimatedBarExample(),
+                                builder: (context) => ProfileSetup(),
                               )),
                           child: const CustomButtom('$verifybtnText'))),
                 ],

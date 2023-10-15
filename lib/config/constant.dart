@@ -11,6 +11,7 @@ const String onboardthree =
 
 const String heading = 'SignUp or Login';
 const String otpbtnText = 'GET OTP';
+const String hinttxt = 'Enter Your Phone Number';
 const String termText =
     'By Continuing, you agree to our Term of policy and Privacy policy';
 
@@ -28,11 +29,14 @@ const String verifybtnText = 'VERIFY CODE';
 
 const String profileappbarText = 'Profile Setup';
 const String nametxtfield = 'Name';
+const String nametxtfieldhint = 'Enter Your Name';
 const String mailtxtfield = 'Mail';
+const String mailtxtfieldhint = 'Enter Your Mail';
 const String mobiletxtfield = 'Mobile';
+const String mobiletxtfieldhint = '9977184307';
+const String genderselect = 'Gender';
 const List genderstxt = ['Male', 'Female', 'Others'];
 const String chkbox1 = 'I am above 18 years old';
-const String chkbox2 = 'I accept all Term of policy and Privacy policy';
 const String profileUpdatebtn = 'UPDATE';
 
 

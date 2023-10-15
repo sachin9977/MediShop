@@ -8,12 +8,11 @@ class Splash extends StatelessWidget {
     return EasySplashScreen(
       logo: Image.asset('assets/images/logoone.png'),
       logoWidth: 160,
-      backgroundColor: Color.fromARGB(255, 69, 161, 218),
+      backgroundColor: const Color.fromARGB(255, 69, 161, 218),
       showLoader: true,
       loaderColor: Colors.white,
-      // loadingText: Text("Loading..."),
-      navigator: onboard(),
-      durationInSeconds: 4,
+      navigator: const onboard(),
+      durationInSeconds: 3,
     );
   }
 }

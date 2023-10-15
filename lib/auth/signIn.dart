@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medshop/auth/otpScreen.dart';
 
@@ -13,6 +14,25 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  Future<void> sendOTP(String phoneNumber) async {
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) {
+        // Auto verification, if the phone number is automatically detected
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        // Handle verification failure
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        // Save verification ID for later use
+        // Typically, this is sent to another screen for OTP entry
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        // Called when the automatic code retrieval time has passed
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,13 +76,15 @@ class _SignInState extends State<SignIn> {
               SizedBox(
                   height: MediaQuery.of(context).size.height / 8,
                   child: InkWell(
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const OtpScreen(),
-                          )),
-                      child: const CustomButtom('$otpbtnText',)
-                      )),
+                      onTap: () => sendOTP('9977184307'),
+                      // onTap: () => Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (context) => const OtpScreen(),
+                      //     )),
+                      child: const CustomButtom(
+                        '$otpbtnText',
+                      ))),
               const Text(
                 termText,
                 textAlign: TextAlign.center,

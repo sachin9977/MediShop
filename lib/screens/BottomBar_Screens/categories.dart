@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key});
@@ -13,15 +11,18 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          Container(
-            height: 200,
-            color: Colors.amber,
-          )
-        ],
+      body: ListView.builder(
+        itemCount: 10,
+        itemBuilder: (context, index) => const ListTile(
+          leading: Icon(
+            Icons.abc,
+            size: 40,
+          ),
+          title: Text("Cardio"),
+          trailing: Icon(Icons.arrow_forward_ios),
+        ),
       ),
+ 
     );
   }
 }

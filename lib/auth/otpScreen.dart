@@ -1,20 +1,23 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:medshop/auth/profilesetup.dart';
+import 'package:medshop/auth/signIn.dart';
 import 'package:medshop/config/constant.dart';
 import 'package:medshop/widgets/customButton.dart';
+import 'package:medshop/widgets/toast.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
-
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key});
-
   @override
   State<OtpScreen> createState() => _OtpScreenState();
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-   
+  var sms = '';
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +97,9 @@ class _OtpScreenState extends State<OtpScreen> {
                 style: const TextStyle(fontSize: 17),
                 textFieldAlignment: MainAxisAlignment.spaceAround,
                 fieldStyle: FieldStyle.box,
-             
+                onChanged: (value) {
+                  sms = value;
+                },
               ),
               const SizedBox(
                 height: 40,
@@ -114,15 +119,37 @@ class _OtpScreenState extends State<OtpScreen> {
                       ),
                     ],
                   ),
-                  Container(
+                  SizedBox(
                       height: MediaQuery.of(context).size.height / 8,
                       width: MediaQuery.of(context).size.width / 2,
                       child: InkWell(
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProfileSetup(),
-                              )),
+                          onTap: () async {
+                            try {
+                              PhoneAuthCredential credential =
+                                  PhoneAuthProvider.credential(
+                                verificationId: SignIn.verify,
+                                smsCode: sms,
+                              );
+                              await auth.signInWithCredential(credential);
+
+                              const CustomToast(
+                                  message: "User signed in successfully!",
+                                  backgroundColor: Colors.green);
+                              if (kDebugMode) {
+                                print('User signed in successfully!');
+                              }
+                            } catch (e) {
+                              const CustomToast(
+                                  message: "User signed in Failed!",
+                                  backgroundColor: Colors.red);
+                            }
+                          },
+
+                          // onTap: () => Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) => ProfileSetup(),
+                          //     )),
                           child: const CustomButtom('$verifybtnText'))),
                 ],
               ),

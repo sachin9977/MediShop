@@ -30,6 +30,7 @@ class CircularTextField extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20.0),
             child: TextFormField(
+              // keyboardType:,
               controller: controller,
               onChanged: onChanged,
               decoration: InputDecoration(

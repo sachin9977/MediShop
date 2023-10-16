@@ -2,12 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../config/constant.dart';
+import '../provider/authProvider/authProvider.dart';
 import '../widgets/customButton.dart';
 import '../widgets/customTextField.dart';
 import 'otpScreen.dart';
 
 class SignIn extends StatefulWidget {
-  const SignIn({super.key});
+
+
   static String verify = '';
 
   @override
@@ -18,6 +20,22 @@ class _SignInState extends State<SignIn> {
   TextEditingController number = TextEditingController();
 
   var number1 = '';
+  
+  void _onCodeSent(String verificationId) {
+    SignIn.verify = verificationId;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OtpScreen(
+          number1: number1,
+        ),
+      ),
+    );
+  }
+
+  void _onVerificationFailed(FirebaseAuthException e) {
+    print('Phone verification failed: ${e.message}');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +81,7 @@ class _SignInState extends State<SignIn> {
                     controller: number,
                     onChanged: (value) {
                       setState(() {
-                        number1 = value;
+                        number1 = '+91$value';
                       });
                     },
                   )),
@@ -71,31 +89,11 @@ class _SignInState extends State<SignIn> {
                   height: MediaQuery.of(context).size.height / 8,
                   child: InkWell(
                       onTap: () async {
-                        try {
-                          await FirebaseAuth.instance.verifyPhoneNumber(
-                            phoneNumber: number1,
-                            verificationCompleted:
-                                (PhoneAuthCredential credential) {},
-                            verificationFailed: (FirebaseAuthException e) {
-                              print('Phone verification failed: ${e.message}');
-                            },
-                            codeSent:
-                                (String verificationId, int? resendToken) {
-                              SignIn.verify = verificationId;
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => OtpScreen(),
-                                ),
-                              );
-                            },
-                            codeAutoRetrievalTimeout:
-                                (String verificationId) {},
-                          );
-                        } catch (e) {
-                          print(
-                              'An error occurred during phone verification: $e');
-                        }
+                        await AuthProvider.verifyPhoneNumber(
+                          number1,
+                          _onCodeSent,
+                          _onVerificationFailed,
+                        );
                       },
                       child: const CustomButtom(
                         '$otpbtnText',

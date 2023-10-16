@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:medshop/provider/authProvider/profileProvider.dart';
 import 'package:medshop/screens/splashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 
 
 void main() async {
@@ -10,7 +12,12 @@ void main() async {
   } catch (e) {
     print('Error initializing Firebase: $e');
   }
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ProfileSetupProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 
@@ -22,9 +29,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MedShop',
-      // theme: ThemeData(
-      //   primarySwatch: Colors.teal,
-      // ),
       home: Splash(),
     );
   }

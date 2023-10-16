@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:medshop/auth/profilesetup.dart';
 import 'package:medshop/auth/signIn.dart';
 import 'package:medshop/config/constant.dart';
 import 'package:medshop/widgets/customButton.dart';
@@ -8,15 +11,60 @@ import 'package:medshop/widgets/toast.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
+import '../provider/authProvider/authProvider.dart';
+
 class OtpScreen extends StatefulWidget {
+
+  const OtpScreen({super.key, required this.number1});
+
+  final String number1;
+
+
   @override
   State<OtpScreen> createState() => _OtpScreenState();
 }
 
 class _OtpScreenState extends State<OtpScreen> {
   var sms = '';
+  int _secondsRemaining = 30;
+  late Timer _timer;
+
 
   final FirebaseAuth auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Start the timer
+    _startTimer();
+  }
+
+  void _startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    _timer = Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (_secondsRemaining == 0) {
+          setState(() {
+            timer.cancel();
+          });
+        } else {
+          setState(() {
+            _secondsRemaining--;
+          });
+        }
+      },
+    );
+  }
+
+  void _onCodeSent(String verificationId) {
+    SignIn.verify = verificationId;
+  }
+
+  void _onVerificationFailed(FirebaseAuthException e) {
+    print('Phone verification failed: ${e.message}');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,14 +111,23 @@ class _OtpScreenState extends State<OtpScreen> {
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
+                          children: [
                             Text(
-                              number,
+                              widget.number1,
                               style: TextStyle(fontSize: 20),
                             ),
-                            Icon(
-                              Icons.edit,
-                              color: Color.fromARGB(255, 69, 161, 218),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SignIn(),
+                                    ));
+                              },
+                              child: const Icon(
+                                Icons.edit,
+                                color: Color.fromARGB(255, 69, 161, 218),
+                              ),
                             )
                           ],
                         ),
@@ -108,15 +165,41 @@ class _OtpScreenState extends State<OtpScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Column(
-                    children: const [
-                      Text('20'),
+                    children: [
+                      const Text("didn't get code?"),
+                      const SizedBox(
+                        height: 5,
+                      ),
                       Text(
-                        resendOTP,
-                        style: TextStyle(fontSize: 16),
+                        '$_secondsRemaining',
+                        style: const TextStyle(fontSize: 16),
                       ),
-                      SizedBox(
-                        height: 40,
+                      const SizedBox(
+                        height: 5,
                       ),
+                      if (_secondsRemaining == 0)
+                        InkWell(
+                            onTap: () async {
+                              await AuthProvider.verifyPhoneNumber(
+                                widget.number1,
+                                _onCodeSent,
+                                _onVerificationFailed,
+                              );
+                              setState(() {
+                                _secondsRemaining = 30;
+                                _startTimer();
+                              });
+                            },
+                            child: Text(
+                              "Resend code",
+                              style: TextStyle(
+                                  color: _secondsRemaining == 0
+                                      ? Color.fromARGB(255, 69, 161, 218)
+                                      : Colors.black),
+                            )),
+                      const SizedBox(
+                        height: 30,
+                      )
                     ],
                   ),
                   SizedBox(
@@ -131,7 +214,12 @@ class _OtpScreenState extends State<OtpScreen> {
                                 smsCode: sms,
                               );
                               await auth.signInWithCredential(credential);
-
+                              // ignore: use_build_context_synchronously
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ProfileSetup(),
+                                  ));
                               const CustomToast(
                                   message: "User signed in successfully!",
                                   backgroundColor: Colors.green);
@@ -144,12 +232,6 @@ class _OtpScreenState extends State<OtpScreen> {
                                   backgroundColor: Colors.red);
                             }
                           },
-
-                          // onTap: () => Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (context) => ProfileSetup(),
-                          //     )),
                           child: const CustomButtom('$verifybtnText'))),
                 ],
               ),

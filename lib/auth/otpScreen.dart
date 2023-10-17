@@ -218,18 +218,28 @@ class _OtpScreenState extends State<OtpScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const ProfileSetup(),
+                                    builder: (context) => ProfileSetup(
+                                      numb: widget.number1,
+                                    ),
                                   ));
-                              const CustomToast(
-                                  message: "User signed in successfully!",
-                                  backgroundColor: Colors.green);
-                              if (kDebugMode) {
-                                print('User signed in successfully!');
-                              }
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colors.green,
+                                  content: Text("Number Registered"),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                             
                             } catch (e) {
-                              const CustomToast(
-                                  message: "User signed in Failed!",
-                                  backgroundColor: Colors.red);
+                              print(e);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colors.red,
+                                  content: Text(
+                                      "Incorrect Code"),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
                             }
                           },
                           child: const CustomButtom('$verifybtnText'))),

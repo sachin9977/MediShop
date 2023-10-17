@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medshop/provider/authProvider/authProvider.dart';
 import 'package:medshop/provider/authProvider/profileProvider.dart';
 import 'package:medshop/screens/splashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,8 +14,13 @@ void main() async {
     print('Error initializing Firebase: $e');
   }
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ProfileSetupProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            create: (context) => ProfileSetupProvider()),
+        //   ChangeNotifierProvider<RoomPostProvider>(
+        // create: (_) => RoomPostProvider()),
+      ],
       child: const MyApp(),
     ),
   );

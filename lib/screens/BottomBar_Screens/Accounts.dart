@@ -1,5 +1,12 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import 'package:medshop/screens/ProfileScreens/FAQs.dart';
+import 'package:medshop/screens/ProfileScreens/HealthArticles.dart';
+import 'package:medshop/screens/ProfileScreens/Wishlist.dart';
+import 'package:medshop/screens/ProfileScreens/aboutUs.dart';
+
+import '../ProfileScreens/EditProfile.dart';
+import '../ProfileScreens/HelpCenter.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -34,7 +41,7 @@ class _AccountScreenState extends State<AccountScreen> {
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [
-              const ListTile(
+              ListTile(
                 horizontalTitleGap: 10,
                 leading: Icon(
                   Icons.person,
@@ -45,9 +52,16 @@ class _AccountScreenState extends State<AccountScreen> {
                   style: TextStyle(fontSize: 16),
                 ),
                 subtitle: Text("6232580029"),
-                trailing: Text(
-                  "Edit",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                trailing: InkWell(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const EditProfile(),
+                      )),
+                  child: Text(
+                    "Edit",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
                 ),
               ),
               Row(
@@ -110,7 +124,13 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WishList(),
+                          ));
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(40),
@@ -143,8 +163,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     borderRadius: BorderRadius.circular(12)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    ListTile(
+                  children: [
+                    const ListTile(
                       horizontalTitleGap: 0,
                       leading: Icon(Icons.location_on_outlined),
                       title: Text(
@@ -158,14 +178,14 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
                       trailing: Icon(Icons.arrow_forward_ios),
                     ),
-                    Divider(
+                    const Divider(
                       color: Colors.black12,
                       thickness: 1,
                       height: 0,
                       indent: 20,
                       endIndent: 20,
                     ),
-                    ListTile(
+                    const ListTile(
                       horizontalTitleGap: 0,
                       leading: Icon(Icons.speaker),
                       title: Text(
@@ -179,7 +199,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
                       trailing: Icon(Icons.arrow_forward_ios),
                     ),
-                    Divider(
+                    const Divider(
                       color: Colors.black12,
                       thickness: 1,
                       height: 0,
@@ -187,18 +207,23 @@ class _AccountScreenState extends State<AccountScreen> {
                       endIndent: 20,
                     ),
                     ListTile(
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HelpCenter(),
+                          )),
                       horizontalTitleGap: 0,
-                      leading: Icon(Icons.settings),
-                      title: Text(
+                      leading: const Icon(Icons.settings),
+                      title: const Text(
                         "Help center",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16),
                       ),
-                      subtitle: Text(
+                      subtitle: const Text(
                         "Your fav medicine here..",
                         style: TextStyle(fontSize: 10),
                       ),
-                      trailing: Icon(Icons.arrow_forward_ios),
+                      trailing: const Icon(Icons.arrow_forward_ios),
                     ),
                   ],
                 ),
@@ -219,38 +244,56 @@ class _AccountScreenState extends State<AccountScreen> {
                     borderRadius: BorderRadius.circular(12)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text("FAQ'S"),
-                    Divider(
+                  children: [
+                    InkWell(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Faqs(),
+                            )),
+                        child: const Text("FAQ'S")),
+                    const Divider(
                       color: Colors.black12,
                       thickness: 1,
                       height: 30,
                     ),
-                    Text("Health articles"),
-                    Divider(
+                    InkWell(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HealthArticals(),
+                            )),
+                        child: const Text("Health articles")),
+                    const Divider(
                       color: Colors.black12,
                       thickness: 1,
                       height: 30,
                     ),
-                    Text("About US"),
-                    Divider(
+                    InkWell(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AboutUs(),
+                            )),
+                        child: const Text("About US")),
+                    const Divider(
                       color: Colors.black12,
                       thickness: 1,
                       height: 30,
                     ),
-                    Text("Terms of use"),
-                    Divider(
+                    const Text("Terms of use"),
+                    const Divider(
                       color: Colors.black12,
                       thickness: 1,
                       height: 30,
                     ),
-                    Text("Privacy Policy"),
-                    Divider(
+                    const Text("Privacy Policy"),
+                    const Divider(
                       color: Colors.black12,
                       thickness: 1,
                       height: 30,
                     ),
-                    Text("LogOut"),
+                    const Text("LogOut"),
                   ],
                 ),
               )

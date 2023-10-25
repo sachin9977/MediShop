@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lecle_flutter_carousel_pro/lecle_flutter_carousel_pro.dart';
+import 'package:medshop/screens/ProfileScreens/Wishlist.dart';
 import 'package:medshop/widgets/customButton.dart';
 
 import '../../components/categorycomponent.dart';
@@ -40,12 +41,21 @@ class _HomeScreenState extends State<HomeScreen> {
           Icons.logo_dev,
           color: Colors.black,
         ),
-        actions: const [
-          Icon(
-            Icons.shopping_basket,
-            color: Color.fromARGB(255, 160, 46, 38),
+        actions: [
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const WishList(),
+                  ));
+            },
+            child: const Icon(
+              Icons.shopping_basket,
+              color: Color.fromARGB(255, 177, 69, 61),
+            ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 10,
           )
         ],
@@ -113,11 +123,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.grey)),
                     child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.medication_outlined),
-                          Text(
+                        children: [
+                          Image.network(
+                              'https://www.medbuzz.in/assets/images/new/Request-1.png',
+                              height: 50),
+                          const Text(
                             "Request availability",
                             textAlign: TextAlign.center,
                           )
@@ -140,9 +152,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.grey)),
                     child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [Icon(Icons.phone), Text("Need help")]),
+                        children: [
+                          Image.network(
+                              'https://www.medbuzz.in/assets/images/new/Request-2.png',
+                              height: 50),
+                          const Text("Need help")
+                        ]),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width / 3.5,
@@ -161,11 +178,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.grey)),
                     child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.alarm),
-                          Text("Pill reminder")
+                        children: [
+                          Image.network(
+                              'https://www.medbuzz.in/assets/images/new/Request-3.png',
+                              height: 50),
+                          const Text(
+                            "Upload Prescription",
+                            textAlign: TextAlign.center,
+                          )
                         ]),
                   ),
                 ],
@@ -305,7 +327,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return CircularProgressIndicator(); // Loading indicator
+                            return const CircularProgressIndicator(); // Loading indicator
                           }
 
                           if (snapshot.hasError) {
@@ -314,7 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           if (snapshot.data == null ||
                               snapshot.data!.docs.isEmpty) {
-                            return Text('No data found');
+                            return const Text('No data found');
                           }
 
                           var documents = snapshot.data!
@@ -331,7 +353,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 return Container(
                                   height: 140,
                                   width: 120,
-                                  margin: EdgeInsets.only(right: 10, left: 2),
+                                  margin:
+                                      const EdgeInsets.only(right: 10, left: 2),
                                   decoration: BoxDecoration(
                                     boxShadow: [
                                       BoxShadow(
@@ -354,7 +377,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       Text(
                                         document['name'],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                         textAlign: TextAlign.center,
                                       ),
@@ -365,34 +388,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           );
                         })
-                    // Container(
-                    //   height: 140,
-                    //   width: 130,
-                    //   decoration: BoxDecoration(
-                    //       boxShadow: [
-                    //         BoxShadow(
-                    //           color:
-                    //               Colors.grey.withOpacity(0.3), // Shadow color
-                    //           spreadRadius: 2,
-                    //           blurRadius: 4,
-                    //           offset: const Offset(
-                    //               0, 1), // Changes position of shadow
-                    //         ),
-                    //       ],
-                    //       color: Colors.white,
-                    //       borderRadius: BorderRadius.circular(12)),
-                    //   child: Column(
-                    //     mainAxisAlignment: MainAxisAlignment.center,
-                    //     children: [
-                    //       Container(
-                    //         height: 100,
-                    //         child: Image.network(
-                    //             'https://cdn3.vectorstock.com/i/1000x1000/02/02/buy-online-over-white-background-shopping-bag-vector-8450202.jpg'),
-                    //       ),
-                    //       const Text('OTC Products')
-                    //     ],
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
@@ -417,7 +412,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     dotBgColor: Colors.transparent,
                   )),
               const SizedBox(
-                height: 100,
+                height: 50,
               ),
             ],
           ),

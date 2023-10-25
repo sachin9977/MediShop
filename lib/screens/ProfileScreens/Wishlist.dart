@@ -26,7 +26,7 @@ class _WishListState extends State<WishList> {
         actions: const [
           Icon(
             Icons.shopping_basket,
-            color: Colors.red,
+            color: Color.fromARGB(255, 177, 69, 61),
           ),
           SizedBox(
             width: 20,

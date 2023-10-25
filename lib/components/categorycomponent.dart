@@ -43,16 +43,20 @@ class _CategoryState extends State<Category> {
               ? ListView.builder(
                   itemCount: categoryDocs.length,
                   itemBuilder: (context, index) {
-                    return _buildListItem(categoryDocs[index].data());
+                    print(categoryDocs[index].data());
+                    // print(categoryDocs[index].id);
+                    return _buildListItem(
+                        categoryDocs[index].data(), categoryDocs[index].id);
                   },
                 )
               : GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3, // You can adjust the number of columns
                   ),
                   itemCount: categoryDocs.length,
                   itemBuilder: (context, index) {
-                    return _buildGridItem(categoryDocs[index].data());
+                    return _buildGridItem(
+                        categoryDocs[index].data(), categoryDocs[index].id);
                   },
                 );
         },
@@ -60,7 +64,7 @@ class _CategoryState extends State<Category> {
     );
   }
 
-  Widget _buildListItem(dynamic data) {
+  Widget _buildListItem(dynamic data, String id) {
     final category =
         data as Map<String, dynamic>; // Cast the data to Map<String, dynamic>
     return Padding(
@@ -72,7 +76,8 @@ class _CategoryState extends State<Category> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ProductPage(),
+                  builder: (context) =>
+                      ProductPage(apptxt: category['name'], id: id),
                 ),
               );
             },
@@ -94,7 +99,7 @@ class _CategoryState extends State<Category> {
     );
   }
 
-  Widget _buildGridItem(dynamic data) {
+  Widget _buildGridItem(dynamic data, String id) {
     final category =
         data as Map<String, dynamic>; // Cast the data to Map<String, dynamic>
     return Padding(
@@ -104,7 +109,8 @@ class _CategoryState extends State<Category> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const ProductPage(),
+              builder: (context) =>
+                  ProductPage(apptxt: category['name'], id: id),
             ),
           );
         },

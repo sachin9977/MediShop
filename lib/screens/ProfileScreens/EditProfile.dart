@@ -194,7 +194,7 @@ class _EditProfileState extends State<EditProfile> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(widget.mobile ?? "null hai bhai"),
+                              Text(widget.mobile),
                               Row(
                                 children: const [
                                   Icon(

@@ -47,6 +47,8 @@ dependencies:
   fluttertoast: ^8.2.2
   cloud_firestore: ^4.9.3
   flutter_faq: ^1.0.1+1
+  lecle_flutter_carousel_pro: ^0.0.1
+
 
 
 

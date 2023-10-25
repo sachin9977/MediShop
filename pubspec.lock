@@ -224,6 +224,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.5"
+  lecle_flutter_carousel_pro:
+    dependency: "direct main"
+    description:
+      name: lecle_flutter_carousel_pro
+      sha256: "1681249f583c402091a4343b90ec51a89f4b67084fed073285f91364f553e7fd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   lints:
     dependency: transitive
     description:

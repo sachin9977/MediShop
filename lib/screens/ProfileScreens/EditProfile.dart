@@ -1,13 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-
 import '../../config/constant.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/customTextField.dart';
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({super.key});
+  const EditProfile({super.key, required this.mobile, required this.name});
+
+  final String mobile;
+  final String name;
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -20,6 +22,53 @@ class _EditProfileState extends State<EditProfile> {
   String? _phoneNumberValidationMessage;
 
   final _formKey = GlobalKey<FormState>();
+
+  Future<void> updateUserProfile() async {
+    if (_formKey.currentState!.validate()) {
+      // Get the current user
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        // Reference to Firestore collection "userProfiles"
+        CollectionReference userProfiles =
+            FirebaseFirestore.instance.collection('userProfiles');
+
+        // Construct the data to update
+        Map<String, dynamic> updatedData = {
+          'name': nameController.text, // Update the name
+          'mail': mailController.text, // Update the email
+        };
+
+        try {
+          // Update the document with the user's UID
+          await userProfiles.doc(user.uid).update(updatedData);
+          print(userProfiles);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: Colors.green,
+              content: Text("Profile updated successfully"),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        } catch (error) {
+          print(error);
+          print("Error updating profile: $error");
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: Colors.red,
+              content: Text("Failed to update profile"),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      }
+    }
+  }
+
+// Add a function to call updateUserProfile when the submit button is pressed
+  void handleProfileUpdate() {
+    updateUserProfile();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +194,7 @@ class _EditProfileState extends State<EditProfile> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("widget.numb"),
+                              Text(widget.mobile ?? "null hai bhai"),
                               Row(
                                 children: const [
                                   Icon(
@@ -194,6 +243,7 @@ class _EditProfileState extends State<EditProfile> {
                         SizedBox(
                             height: 60,
                             child: InkWell(
+                                onTap: handleProfileUpdate,
                                 child: const CustomButtom(profileUpdatebtn)))
                       ],
                     )))));

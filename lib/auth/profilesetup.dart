@@ -7,9 +7,12 @@ import '../provider/authProvider/profileProvider.dart';
 import '../widgets/customTextField.dart';
 
 class ProfileSetup extends StatefulWidget {
-  const ProfileSetup({super.key, required this.numb});
+
+  const ProfileSetup({super.key, required this.uid, required this.numb});
 
   final String numb;
+  final String uid;
+
 
   @override
   State<ProfileSetup> createState() => _ProfileSetupState();
@@ -200,7 +203,8 @@ class _ProfileSetupState extends State<ProfileSetup> {
                           onTap: () {
                             if (_formKey.currentState != null &&
                                 _formKey.currentState!.validate()) {
-                              provider.saveProfileDataToFirebase(widget.numb,context);
+                              provider.saveProfileDataToFirebase(
+                                  widget.uid, widget.numb, context);
                             }
                           },
                           child: const CustomButtom(profileUpdatebtn)))

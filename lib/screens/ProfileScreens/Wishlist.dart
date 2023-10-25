@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class WishList extends StatefulWidget {
   const WishList({super.key});
@@ -25,7 +23,7 @@ class _WishListState extends State<WishList> {
           },
         ),
         title: const Text("WishList", style: TextStyle(color: Colors.black)),
-        actions: [
+        actions: const [
           Icon(
             Icons.shopping_basket,
             color: Colors.red,
@@ -35,7 +33,7 @@ class _WishListState extends State<WishList> {
           )
         ],
       ),
-      body: Center(child: Text("Products are not available")),
+      body: const Center(child: Text("Products are not available")),
     );
   }
 }

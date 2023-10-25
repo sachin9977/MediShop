@@ -5,10 +5,6 @@ import 'package:medshop/BottomBar.dart';
 
 class ProfileSetupProvider extends ChangeNotifier {
 
-  // BuildContext _context;
-
-  // ProfileSetupProvider(this._context);
-
   TextEditingController nameController = TextEditingController();
   TextEditingController mailController = TextEditingController();
 
@@ -19,12 +15,14 @@ class ProfileSetupProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void saveProfileDataToFirebase(String numb,BuildContext contxt) async {
+  void saveProfileDataToFirebase(
+      String uid, String numb, BuildContext contxt) async {
     String name = nameController.text;
     String mail = mailController.text;
 
     try {
       await FirebaseFirestore.instance.collection('userProfiles').add({
+        'ui': uid,
         'name': name,
         'mail': mail,
         'mobile': numb,

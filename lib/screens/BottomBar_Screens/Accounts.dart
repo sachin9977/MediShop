@@ -1,4 +1,6 @@
 // ignore: file_names
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medshop/screens/ProfileScreens/FAQs.dart';
 import 'package:medshop/screens/ProfileScreens/HealthArticles.dart';
@@ -16,6 +18,57 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+
+  String? name = "Loading...";
+  String? mobile = "Loading...";
+
+  // Function to fetch user profile data
+  Future<void> fetchUserProfile() async {
+    try {
+      // Get the current user
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        // Reference to Firestore collection "userProfiles"
+        CollectionReference userProfiles =
+            FirebaseFirestore.instance.collection('userProfiles');
+        print(userProfiles);
+
+        // Query the documents in the collection
+        QuerySnapshot querySnapshot =
+            await userProfiles.where('ui', isEqualTo: user.uid).get();
+        // QuerySnapshot querySnapshot =
+        //     await userProfiles.where('uid', isEqualTo: user.uid).get();
+
+        // Check if the query has any documents
+        if (querySnapshot.docs.isNotEmpty) {
+          // Get the data from the first document (assuming there's only one)
+          Map<String, dynamic> userData =
+              querySnapshot.docs[0].data() as Map<String, dynamic>;
+
+          // Retrieve the 'name' field from the document
+          String userName = userData['name'];
+          String mobileNumber = userData['mobile'];
+
+          // Update the state with the user's name
+          setState(() {
+            name = userName;
+            mobile = mobileNumber;
+          });
+        }
+      }
+    } catch (error) {
+      print("Error fetching user profile: $error");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch user profile data when the widget initializes
+    fetchUserProfile();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,22 +96,23 @@ class _AccountScreenState extends State<AccountScreen> {
             children: [
               ListTile(
                 horizontalTitleGap: 10,
-                leading: Icon(
+                leading: const Icon(
                   Icons.person,
                   size: 40,
                 ),
-                title: Text(
-                  "Sachin Choudhary",
-                  style: TextStyle(fontSize: 16),
-                ),
-                subtitle: Text("6232580029"),
+                title: Text(name ?? "Loading..."),
+                // const Text(
+                //   "Sachin Choudhary",
+                //   style: TextStyle(fontSize: 16),
+                // ),
+                subtitle: Text(mobile!),
                 trailing: InkWell(
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const EditProfile(),
+                        builder: (context) =>  EditProfile(name:name!, mobile: mobile!,),
                       )),
-                  child: Text(
+                  child: const Text(
                     "Edit",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
@@ -128,7 +182,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => WishList(),
+                            builder: (context) => const WishList(),
                           ));
                     },
                     child: Container(

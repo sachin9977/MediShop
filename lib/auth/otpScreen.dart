@@ -219,6 +219,8 @@ class _OtpScreenState extends State<OtpScreen> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => ProfileSetup(
+                                      uid: FirebaseAuth
+                                          .instance.currentUser!.uid,
                                       numb: widget.number1,
                                     ),
                                   ));

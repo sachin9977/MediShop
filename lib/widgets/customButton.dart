@@ -18,16 +18,17 @@ class _CustomButtomState extends State<CustomButtom> {
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5), // Shadow color
-                spreadRadius: 5,
-                blurRadius: 7,
+              spreadRadius: 3,
+              blurRadius: 5,
                 offset: const Offset(0, 3), // Changes position of shadow
               ),
             ],
             color: const Color.fromARGB(255, 69, 161, 218),
-            borderRadius: BorderRadius.circular(12)),
-        margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          // borderRadius: BorderRadius.circular(12)
+        ),
+        // margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         height: 55,
-        width: double.infinity,
+        // width: double.infinity,
         child: Center(
             child: Text(
           widget.txt,

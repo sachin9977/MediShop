@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:medshop/screens/ProfileScreens/Wishlist.dart';
+import 'package:medshop/screens/productDetail.dart';
+import 'package:medshop/widgets/customButton.dart';
 
 class ProductPage extends StatefulWidget {
   ProductPage({super.key, required this.apptxt, required this.id});
@@ -13,38 +15,33 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-
-  Map<String, dynamic> maindata = {};
+  List<Map<String, dynamic>> maindata = [];
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    dataa(widget
-        .id); // Call the dataa function with the widget's id when the widget initializes.
+    dataa(widget.id);
   }
 
   void dataa(id) {
     FirebaseFirestore.instance
         .collection('CategoryCollection')
+        .doc(id)
+        .collection('sub${id}')
         .get()
-        .then((value) {
-      value.docs.forEach((element) {
-        FirebaseFirestore.instance
-            .collection('CategoryCollection')
-            .doc(id)
-            .collection('sub${id}')
-            .get()
-            .then((subColl) {
-          subColl.docs.forEach((element) {
+        .then((subColl) {
+      if (subColl.docs.isNotEmpty) {
             setState(() {
-              maindata = element.data(); // Assign element.data() to maindata.
-            });
-            print(maindata);
-            print(id);
-            print(element.data());
-          });
+          maindata = subColl.docs.map((doc) => doc.data()).toList();
+
+          // maindata = subColl.docs.first.data();
+          print(subColl.docs.length);
+          // print(maindata);
+          // print(maindata.length);
+          isLoading = false;
         });
-      });
+      }
     });
   }
 
@@ -65,84 +62,96 @@ class _ProductPageState extends State<ProductPage> {
             icon: const Icon(Icons.shopping_basket),
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WishList(),
-                  ));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const WishList(),
+                ),
+              );
             },
           ),
         ],
       ),
-      body: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2),
-          itemCount: 4,
-          itemBuilder: (context, index) {
-            return Container(
-              height: 90,
-              margin: const EdgeInsets.all(5.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Image.network(
-                    'https://th.bing.com/th/id/OIP.h3l7OSU9jFU10Ib-2I52SQHaDm?pid=ImgDet&rs=1',
-                    height: 50,
-                    fit: BoxFit.cover,
-                  ),
-                  Text(
-                    maindata['name'],
-                    style: TextStyle(fontSize: 10.0),
-                  ),
-                  const Text(
-                    'strip of 10 tablets',
-                    style: TextStyle(fontSize: 8.0, color: Colors.grey),
-                  ),
-                  const Text(
-                    'Labetalol 200mg',
-                    style: TextStyle(fontSize: 8.0),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
-                        'Rs. 100',
-                        style: TextStyle(fontSize: 8.0),
-                      ),
-                      Text(
-                        'Rs. 249',
-                        style: TextStyle(fontSize: 8.0, color: Colors.grey),
-                      ),
-                      Text(
-                        '59% Off',
-                        style: TextStyle(fontSize: 8.0, color: Colors.green),
-                      ),
-                    ],
-                  ),
-                  const Text(
-                    'expiry',
-                    style: TextStyle(fontSize: 10.0),
-                  ),
-                  Container(
-                      height: 30.0,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          dataa(widget.id);
-                        },
-                        child: Text(
-                          'ADD TO CART',
-                          style: TextStyle(fontSize: 14.0),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          minimumSize: const Size(double.infinity, 40),
-                        ),
-                      )),
-                ],
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : GridView.builder(
+              itemCount: maindata.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: MediaQuery.of(context).size.width /
+                    (MediaQuery.of(context).size.height / 1.4),
+                crossAxisCount: 2,
+                mainAxisSpacing: 8.0,
+                crossAxisSpacing: 8.0,
               ),
-            );
-          }),
+              itemBuilder: (context, index) {
+                final productData = maindata[index];
+
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>  ProductDetail(productData),
+                        ));
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 4,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 100,
+                          child: Image.network(
+                            productData['image'],
+                          ),
+                        ),
+                        Text(
+                          productData['name'],
+                          style: const TextStyle(
+                              fontSize: 13, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          productData['Tablet'],
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.black54),
+                        ),
+                        Text(productData['mg']),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(productData['price']),
+                            Text(productData['discountprice']),
+                            Text(
+                              productData['offer-text'],
+                              style: const TextStyle(
+                                  fontSize: 13, color: Colors.green),
+                            ),
+                          ],
+                        ),
+                        Text('Expiry : ${productData['expiry']}'),
+                        Container(
+                          height: 40,
+                          child: const CustomButtom("ADD TO CART"),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
     );
   }
 }

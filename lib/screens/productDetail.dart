@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medshop/widgets/customButton.dart';
+
+import 'Cart.dart';
 
 class ProductDetail extends StatefulWidget {
   const ProductDetail(this.productData, {super.key});
@@ -11,6 +15,64 @@ class ProductDetail extends StatefulWidget {
 }
 
 class _ProductDetailState extends State<ProductDetail> {
+  int counter = 1;
+
+  void incrementQuantity() {
+    setState(() {
+      counter++;
+    });
+  }
+
+  void decrementQuantity() {
+    if (counter > 0) {
+      setState(() {
+        counter--;
+      });
+    }
+  }
+
+  void addToCart() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final productData = widget.productData;
+      final cartItem = {
+        'product_id': 1,
+        'product_name': productData['name'],
+        'product_image':productData['image'],
+        'product_tab':productData['Tablet'],
+        'product_expiry':productData['expiry'],
+        'product_mg':productData['mg'],
+        'product_company':productData['Company Name'],
+        'product_price': productData['price'],
+        'product_discount': productData['discountprice'],
+        'product_offer': productData['offer-text'],
+        'quantity': counter,
+      };
+
+      final cartRef =
+          FirebaseFirestore.instance.collection('carts').doc(user.uid);
+      cartRef.collection('items').add(cartItem);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Added to Cart!'),
+        ),
+      );
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Cart(),
+          ));
+    } else {
+      // Handle the case where the user is not authenticated (e.g., show a login/signup prompt).
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please log in to add items to your cart.'),
+        ),
+      );
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final productData = widget.productData;
@@ -107,10 +169,14 @@ class _ProductDetailState extends State<ProductDetail> {
                             color: Colors.black54,
                             decoration: TextDecoration.lineThrough),
                       ),
-                      const SizedBox(
+                      SizedBox(
                           height: 60,
                           width: 160,
-                          child: CustomButtom("ADD TO CART"))
+                          child: InkWell(
+                              onTap: () {
+                                addToCart();
+                              },
+                              child: CustomButtom("ADD TO CART")))
                     ],
                   )
                 ],

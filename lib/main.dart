@@ -36,8 +36,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MedShop',
-      // home: Splash(),
-      home: AnimatedBarExample(),
+      home: Splash(),
+      // home: AnimatedBarExample(),
     );
   }
 }

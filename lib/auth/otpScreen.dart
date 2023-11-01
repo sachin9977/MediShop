@@ -244,7 +244,7 @@ class _OtpScreenState extends State<OtpScreen> {
                               );
                             }
                           },
-                          child: const CustomButtom('$verifybtnText'))),
+                          child:  CustomButtom('$verifybtnText',BorderRadius.circular(10)))),
                 ],
               ),
             ],

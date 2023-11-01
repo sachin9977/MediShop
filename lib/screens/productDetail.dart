@@ -80,19 +80,33 @@ class _ProductDetailState extends State<ProductDetail> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: const Icon(
-          Icons.arrow_back_ios,
-          color: Colors.black,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         title:
-            const Text('Product Detail', style: TextStyle(color: Colors.black)),
-        actions: const [
-          Icon(
-            Icons.shopping_basket,
-            color: Colors.red,
+            Text("Product Detail", style: const TextStyle(color: Colors.black)),
+        actions: [
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Cart(),
+                  ));
+            },
+            child: Icon(
+              Icons.shopping_basket,
+              color: Color.fromARGB(255, 177, 69, 61),
+            ),
           ),
           SizedBox(
-            width: 10,
+            width: 20,
           )
         ],
       ),
@@ -176,7 +190,8 @@ class _ProductDetailState extends State<ProductDetail> {
                               onTap: () {
                                 addToCart();
                               },
-                              child: CustomButtom("ADD TO CART")))
+                              child: CustomButtom(
+                                  "ADD TO CART", BorderRadius.circular(10))))
                     ],
                   )
                 ],

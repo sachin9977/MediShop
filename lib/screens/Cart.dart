@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:medshop/screens/ProfileScreens/myAddress.dart';
 
 class Cart extends StatefulWidget {
   const Cart({super.key});
@@ -27,36 +28,73 @@ class _CartState extends State<Cart> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomSheet: Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Container(
+                width: MediaQuery.of(context).size.width / 2,
+                height: 60,
+                color: Color.fromARGB(255, 187, 175, 174),
+                child: Center(
+                  child: Text("Rs 100",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                )),
+            InkWell(
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MyAddress(),
+                  )),
+              child: Container(
+                height: 60,
+                width: MediaQuery.of(context).size.width / 2,
+                color: Colors.green,
+                child: Center(
+                    child: Text(
+                  "Proceed",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                )),
+              ),
+            )
+          ],
+        ),
+      ),
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: const Icon(
-          Icons.arrow_back_ios,
-          color: Colors.black,
+        leading: InkWell(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+          ),
         ),
         title: const Text('My Cart', style: TextStyle(color: Colors.black)),
       ),
       body: FutureBuilder(
         future: _fetchCartData(),
+
         builder: (context, AsyncSnapshot<QuerySnapshot?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text("Your cart is empty."));
+            return const Center(child: Text("Your cart is empty."));
           }
-
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
               final cartItem =
                   snapshot.data!.docs[index].data() as Map<String, dynamic>;
-              print(cartItem);
-              print(cartItem.length);
+            
 
               return Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Row(
@@ -75,7 +113,7 @@ class _CartState extends State<Cart> {
                         children: [
                           Text(
                             cartItem['product_name'] ?? 'NA',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                             ),
                           ),
@@ -84,28 +122,31 @@ class _CartState extends State<Cart> {
                           ),
                           Text(
                             cartItem['product_tab'] ?? 'NA',
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                            style: const TextStyle(
+                                fontSize: 12, color: Colors.grey),
                           ),
                           const SizedBox(
                             height: 3,
                           ),
                           Text(
                             cartItem['product_mg'] ?? "NA",
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                            style: const TextStyle(
+                                fontSize: 12, color: Colors.grey),
                           ),
                           const SizedBox(
                             height: 3,
                           ),
                           Text(
                             cartItem['product_company'] ?? 'NA',
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                            style: const TextStyle(
+                                fontSize: 12, color: Colors.grey),
                           ),
                           const SizedBox(
                             height: 3,
                           ),
                           Text(
                             'Expiry : ${cartItem['product_expiry'] ?? 'NA'} ',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(
@@ -116,24 +157,25 @@ class _CartState extends State<Cart> {
                               Text(
                                 cartItem['product_price'] ?? "NA",
                                 style:
-                                    TextStyle(fontSize: 14, color: Colors.red),
+                                    const TextStyle(
+                                    fontSize: 14, color: Colors.red),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 3,
                               ),
                               Text(
                                 cartItem['product_discount'] ?? "NA",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 14,
                                     color: Colors.grey,
                                     decoration: TextDecoration.lineThrough),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 3,
                               ),
                               Text(
                                 cartItem['product_offer'] ?? "NA",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 14, color: Colors.green),
                               ),
                             ],
@@ -149,32 +191,31 @@ class _CartState extends State<Cart> {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
+                                      const BorderRadius.all(
+                                      Radius.circular(5)),
                                   border: Border.all(color: Colors.grey),
                                 ),
-                                child: Expanded(
-                                  child: DropdownButton(
-                                    // Initial Value
-                                    value: dropdownvalue,
+                                child: DropdownButton(
+                                  // Initial Value
+                                  value: dropdownvalue,
 
-                                    // Down Arrow Icon
-                                    icon: const Icon(Icons.keyboard_arrow_down),
+                                  // Down Arrow Icon
+                                  icon: const Icon(Icons.keyboard_arrow_down),
 
-                                    // Array list of items
-                                    items: items.map((String items) {
-                                      return DropdownMenuItem(
-                                        value: items,
-                                        child: Text(items),
-                                      );
-                                    }).toList(),
-                                    // After selecting the desired option,it will
-                                    // change button value to selected value
-                                    onChanged: (String? newValue) {
-                                      setState(() {
-                                        dropdownvalue = newValue!;
-                                      });
-                                    },
-                                  ),
+                                  // Array list of items
+                                  items: items.map((String items) {
+                                    return DropdownMenuItem(
+                                      value: items,
+                                      child: Text(items),
+                                    );
+                                  }).toList(),
+                                  // After selecting the desired option,it will
+                                  // change button value to selected value
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      dropdownvalue = newValue!;
+                                    });
+                                  },
                                 ),
                               ),
                               const SizedBox(
@@ -183,7 +224,25 @@ class _CartState extends State<Cart> {
                               Container(
                                 height: 35,
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                
+                                  onPressed: () async {
+                                    final user = _auth.currentUser;
+                                    if (user != null) {
+                                      final cartItem =
+                                          snapshot.data!.docs[index];
+                                      final cartItemId =
+                                          cartItem.id; // Get the document ID
+                                      await _firestore
+                                          .collection('carts')
+                                          .doc(user.uid)
+                                          .collection('items')
+                                          .doc(cartItemId)
+                                          .delete();
+
+                                      // Refresh the UI by rebuilding the widget
+                                      setState(() {});
+                                    }
+                                  },
                                   style: ElevatedButton.styleFrom(
                                       // padding: EdgeInsets.all(-5),
                                       backgroundColor: const Color.fromARGB(

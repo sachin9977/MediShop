@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class CustomButtom extends StatefulWidget {
   final String txt;
+  final  borderRadius;
 
-  const CustomButtom(this.txt, {Key? key}) : super(key: key);
+   CustomButtom(this.txt,  this.borderRadius);
 
   @override
   State<CustomButtom> createState() => _CustomButtomState();
@@ -24,7 +25,7 @@ class _CustomButtomState extends State<CustomButtom> {
               ),
             ],
             color: const Color.fromARGB(255, 69, 161, 218),
-          // borderRadius: BorderRadius.circular(12)
+          borderRadius: widget.borderRadius,
         ),
         // margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         height: 55,

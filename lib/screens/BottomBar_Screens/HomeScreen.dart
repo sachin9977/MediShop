@@ -219,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Container(
                               height: 80,
                               width: 160,
-                              child: const CustomButtom("Order Now"))
+                              child: CustomButtom("Order Now",BorderRadius.circular(10)))
                         ],
                       ),
                       Container(
@@ -282,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Container(
                               height: 80,
                               width: 160,
-                              child: const CustomButtom("Order Now"))
+                              child:  CustomButtom("Order Now",BorderRadius.circular(10)))
                         ],
                       ),
                       Container(

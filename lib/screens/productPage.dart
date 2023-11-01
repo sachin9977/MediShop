@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:medshop/screens/productDetail.dart';
 import 'package:medshop/widgets/customButton.dart';
 
+import '../widgets/bottomsheet.dart';
 import 'Cart.dart';
 
 class ProductPage extends StatefulWidget {
-  ProductPage({super.key, required this.apptxt, required this.id});
+  const ProductPage({super.key, required this.apptxt, required this.id});
 
   final String apptxt;
   final String id;
@@ -16,8 +17,10 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
+  var counter = 0;
   List<Map<String, dynamic>> maindata = [];
   bool isLoading = true;
+
 
   @override
   void initState() {
@@ -33,132 +36,154 @@ class _ProductPageState extends State<ProductPage> {
         .get()
         .then((subColl) {
       if (subColl.docs.isNotEmpty) {
-            setState(() {
+        setState(() {
           maindata = subColl.docs.map((doc) => doc.data()).toList();
-          print(subColl.docs.length);
           isLoading = false;
         });
       }
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
+  void incrementQuantity() {
+    setState(() {
+      counter++;
+      print(counter);
+    });
+  }
 
-    int counter = 0;
-
-    void incrementQuantity() {
-      setState(() {
-        counter++;
-      });
-    }
-
-    void decrimentQuantity() {
+  void decrementQuantity() {
+    if (counter > 0) {
+      // Ensure counter doesn't go below zero
       setState(() {
         counter--;
+        print(counter);
       });
     }
+  }
 
-    void _showBottomSheet(BuildContext context, prod) {
-      showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.transparent,
-        builder: (BuildContext context) {
-          return Container(
-            decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(40),
-                  topLeft: Radius.circular(40),
-                )),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  SizedBox(
-                    height: 100,
-                    child: Image.network(
-                      prod['image'],
-                    ),
-                  ),
-                  Text(
-                    prod['name'],
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    prod['Tablet'],
-                    style: const TextStyle(fontSize: 14, color: Colors.black54),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(prod['price']),
-                      const SizedBox(width: 5),
-                      Text(prod['discountprice']),
-                      const SizedBox(width: 5),
-                      Text(
-                        prod['offer-text'],
-                        style:
-                            const TextStyle(fontSize: 13, color: Colors.green),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    "Choose Quantity",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          decrimentQuantity();
-                        },
-                        child: const Icon(
-                          Icons.remove_circle_outline,
-                          size: 36,
-                          color: Color.fromARGB(255, 69, 161, 218),
-                        ),
-                      ),
-                      const SizedBox(width: 7),
-                      Text(
-                        '$counter',
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                      const SizedBox(width: 7),
-                      InkWell(
-                        onTap: () {
-                          incrementQuantity();
-                        },
-                        child: const Icon(
-                          Icons.add_circle_outline_outlined,
-                          size: 36,
-                          color: Color.fromARGB(255, 69, 161, 218),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 15),
-                  const SizedBox(
-                      width: 260,
-                      height: 40,
-                      child: CustomButtom("ADD TO CART"))
-                ],
-              ),
-            ),
-          );
+
+void showBottomSheet(BuildContext context, prod) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return CounterBottomSheet(
+        prod: prod,
+        initialCounter: counter, // Pass the initial counter value
+        onCounterChanged: (newCounter) {
+          setState(() {
+            counter = newCounter; // Update the counter when it changes in the bottom sheet
+          });
         },
       );
-    }
+    },
+  );
+}
+
+
+  // void showBottomSheet(BuildContext context, prod) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     backgroundColor: Colors.transparent,
+  //     builder: (BuildContext context) {
+  //       return Container(
+  //         decoration: const BoxDecoration(
+  //             color: Colors.white,
+  //             borderRadius: BorderRadius.only(
+  //               topRight: Radius.circular(40),
+  //               topLeft: Radius.circular(40),
+  //             )),
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(16.0),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: <Widget>[
+  //               SizedBox(
+  //                 height: 100,
+  //                 child: Image.network(
+  //                   prod['image'],
+  //                 ),
+  //               ),
+  //               Text(
+  //                 prod['name'],
+  //                 style: const TextStyle(fontSize: 14),
+  //               ),
+  //               const SizedBox(height: 10),
+  //               Text(
+  //                 prod['Tablet'],
+  //                 style: const TextStyle(fontSize: 14, color: Colors.black54),
+  //               ),
+  //               const SizedBox(height: 10),
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   Text(prod['price']),
+  //                   const SizedBox(width: 5),
+  //                   Text(
+  //                     prod['discountprice'],
+  //                     style: const TextStyle(
+  //                         color: Colors.black54,
+  //                         decoration: TextDecoration.lineThrough),
+  //                   ),
+  //                   const SizedBox(width: 5),
+  //                   Text(
+  //                     prod['offer-text'],
+  //                     style: const TextStyle(fontSize: 13, color: Colors.green),
+  //                   ),
+  //                 ],
+  //               ),
+  //               const SizedBox(height: 10),
+  //               const Text(
+  //                 "Choose Quantity",
+  //                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+  //               ),
+  //               const SizedBox(height: 10),
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   InkWell(
+  //                     onTap: () => decrementQuantity(),
+  //                     child: const Icon(
+  //                       Icons.remove_circle_outline,
+  //                       size: 36,
+  //                       color: Color.fromARGB(255, 69, 161, 218),
+  //                     ),
+  //                   ),
+  //                   const SizedBox(width: 7),
+  //                   Text(
+  //                     'count$counter',
+  //                     style: const TextStyle(fontSize: 20),
+  //                   ),
+  //                   const SizedBox(width: 7),
+  //                   InkWell(
+  //                     onTap: () => incrementQuantity(),
+  //                     child: const Icon(
+  //                       Icons.add_circle_outline_outlined,
+  //                       size: 36,
+  //                       color: Color.fromARGB(255, 69, 161, 218),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //               const SizedBox(height: 15),
+  //               SizedBox(
+  //                   width: 260,
+  //                   height: 40,
+  //                   child:
+  //                       CustomButtom("ADD TO CART", BorderRadius.circular(0)))
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: IconButton(          
+        leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios,
             color: Colors.black,
@@ -174,15 +199,15 @@ class _ProductPageState extends State<ProductPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Cart(),
+                    builder: (context) => const Cart(),
                   ));
             },
-            child: Icon(
+            child: const Icon(
               Icons.shopping_basket,
               color: Color.fromARGB(255, 177, 69, 61),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 20,
           )
         ],
@@ -202,13 +227,12 @@ class _ProductPageState extends State<ProductPage> {
               ),
               itemBuilder: (context, index) {
                 final productData = maindata[index];
-
                 return InkWell(
                   onTap: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>  ProductDetail(productData),
+                          builder: (context) => ProductDetail(productData),
                         ));
                   },
                   child: Container(
@@ -249,7 +273,12 @@ class _ProductPageState extends State<ProductPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text(productData['price']),
-                            Text(productData['discountprice']),
+                            Text(
+                              productData['discountprice'],
+                              style: const TextStyle(
+                                  color: Colors.black54,
+                                  decoration: TextDecoration.lineThrough),
+                            ),
                             Text(
                               productData['offer-text'],
                               style: const TextStyle(
@@ -260,11 +289,14 @@ class _ProductPageState extends State<ProductPage> {
                         Text('Expiry : ${productData['expiry']}'),
                         InkWell(
                           onTap: () {
-                            _showBottomSheet(context, productData);
+                            setState(() {
+                              showBottomSheet(context, productData);
+                            });
                           },
                           child: Container(
                             height: 40,
-                            child: const CustomButtom("ADD TO CART"),
+                            child: CustomButtom(
+                                "ADD TO CART", BorderRadius.circular(0)),
                           ),
                         ),
                       ],

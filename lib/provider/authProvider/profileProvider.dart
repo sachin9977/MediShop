@@ -16,7 +16,7 @@ class ProfileSetupProvider extends ChangeNotifier {
   }
 
   void saveProfileDataToFirebase(
-      String uid, String numb, BuildContext contxt) async {
+    String uid, String numb, BuildContext contxt) async {
     String name = nameController.text;
     String mail = mailController.text;
 
@@ -28,9 +28,7 @@ class ProfileSetupProvider extends ChangeNotifier {
         'mobile': numb,
         'gender': selectedChip,
       });
-      // ignore: use_build_context_synchronously
       print("Success");
-      // ignore: use_build_context_synchronously
       Navigator.push(contxt, MaterialPageRoute(builder: (context) => AnimatedBarExample(),));
       
     } catch (error) {

@@ -244,7 +244,8 @@ class _EditProfileState extends State<EditProfile> {
                             height: 60,
                             child: InkWell(
                                 onTap: handleProfileUpdate,
-                                child: const CustomButtom(profileUpdatebtn)))
+                                child: CustomButtom(profileUpdatebtn,
+                                    BorderRadius.circular(10))))
                       ],
                     )))));
   }

@@ -207,7 +207,7 @@ class _ProfileSetupState extends State<ProfileSetup> {
                                   widget.uid, widget.numb, context);
                             }
                           },
-                          child: const CustomButtom(profileUpdatebtn)))
+                          child:  CustomButtom(profileUpdatebtn,BorderRadius.circular(10))))
                 ],
               ),
             );

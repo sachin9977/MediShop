@@ -1,4 +1,3 @@
-// ignore: file_names
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +21,8 @@ class _SignInState extends State<SignIn> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? _phoneNumberValidationMessage;
+
+  bool isLoading = false; // Add isLoading state
 
   void _onCodeSent(String verificationId) {
     SignIn.verify = verificationId;
@@ -51,8 +52,6 @@ class _SignInState extends State<SignIn> {
       ),
     );
   }
-
-  // final _formKey = GlobalKey();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -98,64 +97,72 @@ class _SignInState extends State<SignIn> {
                   ),
                 ),
                 SizedBox(
-                    height: MediaQuery.of(context).size.height / 8,
-                    child: CircularTextField(
-                      keyboardType: TextInputType.phone,
-                      validator: (value) {
-                        setState(() {
-                          if (value!.isEmpty) {
+                  height: MediaQuery.of(context).size.height / 8,
+                  child: CircularTextField(
+                    keyboardType: TextInputType.phone,
+                    validator: (value) {
+                      setState(() {
+                        if (value!.isEmpty) {
+                          _phoneNumberValidationMessage =
+                              "Please enter a valid number";
+                        } else {
+                          if (value.length < 10 || value.length > 10) {
                             _phoneNumberValidationMessage =
-                                "Please enter a valid number";
+                                "Phone number must be 10 digits";
                           } else {
-                            if (value.length < 10 || value.length > 10) {
-                              _phoneNumberValidationMessage =
-                                  "Phone number must be 10 digits";
-                            } else {
-                              _phoneNumberValidationMessage = null;
-                            }
+                            _phoneNumberValidationMessage = null;
                           }
-                        });
-
-                        if (_phoneNumberValidationMessage != null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              backgroundColor: Colors.red,
-                              content: Text(_phoneNumberValidationMessage!),
-                              duration: const Duration(seconds: 2),
-                            ),
-                          );
                         }
+                      });
 
-                        return null;
-                      },
-                      hintText: hinttxt,
-                      controller: number,
-                      onChanged: (value) {
-                        setState(() {
-                          number1 = '+91$value';
-                        });
-                      },
-                    )),
+                      if (_phoneNumberValidationMessage != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(_phoneNumberValidationMessage!),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      }
+
+                      return null;
+                    },
+                    hintText: hinttxt,
+                    controller: number,
+                    onChanged: (value) {
+                      setState(() {
+                        number1 = '+91$value';
+                      });
+                    },
+                  ),
+                ),
                 SizedBox(
-                    height: MediaQuery.of(context).size.height / 8,
-                    child: InkWell(
-                        onTap: () async {
-                          if (_formKey.currentState != null &&
-                              _formKey.currentState!.validate()) {
-                            await AuthProvider.verifyPhoneNumber(
-                              number1,
-                              _onCodeSent,
-                              _onVerificationFailed,
-                            );
-                          }
-                        },
-                        child: const CustomButtom(
-                          '$otpbtnText',
-                        ))),
+                  height: MediaQuery.of(context).size.height / 8,
+                  child: 
+                      InkWell(
+                          onTap: () async {
+                            if (_formKey.currentState != null &&
+                                _formKey.currentState!.validate()) {
+                              setState(() {
+                                isLoading = true; // Set loading state
+                              });
+                              await AuthProvider.verifyPhoneNumber(
+                                number1,
+                                _onCodeSent,
+                                _onVerificationFailed,
+                              );
+                            }
+                          },
+                          child:  CustomButtom(
+                            otpbtnText,
+                            BorderRadius.circular(10)
+                          ),
+                        ),
+                ),
                 const Text(
                   termText,
                   textAlign: TextAlign.center,
-                )
+                ),
               ],
             ),
           ),

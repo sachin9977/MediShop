@@ -3,6 +3,7 @@ import 'package:medshop/BottomBar.dart';
 import 'package:medshop/provider/authProvider/profileProvider.dart';
 import 'package:medshop/provider/categoryProvider/categoryProvider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:medshop/screens/splashScreen.dart';
 import 'package:provider/provider.dart';
 
 
@@ -35,8 +36,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MedShop',
-      // home: Splash(),
-      home: AnimatedBarExample(),
+      home: Splash(),
+      // home: AnimatedBarExample(),
     );
   }
 }

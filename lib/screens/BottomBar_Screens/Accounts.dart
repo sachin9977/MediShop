@@ -9,6 +9,7 @@ import 'package:medshop/screens/ProfileScreens/aboutUs.dart';
 
 import '../ProfileScreens/EditProfile.dart';
 import '../ProfileScreens/HelpCenter.dart';
+import '../onboarding_screens/onboarding.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -60,6 +61,19 @@ class _AccountScreenState extends State<AccountScreen> {
     } catch (error) {
       print("Error fetching user profile: $error");
     }
+  }
+
+
+  Future<void> logout() async {
+    await FirebaseAuth.instance.signOut();
+    // ignore: use_build_context_synchronously
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            const onboard(), // Navigate to your onboarding screen
+      ),
+    );
   }
 
   @override
@@ -347,7 +361,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       thickness: 1,
                       height: 30,
                     ),
-                    const Text("LogOut"),
+                    InkWell(onTap: () => logout(), child: Text("LogOut")),
                   ],
                 ),
               )

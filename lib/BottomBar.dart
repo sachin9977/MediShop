@@ -8,6 +8,8 @@ import 'package:stylish_bottom_bar/model/bar_items.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
 class AnimatedBarExample extends StatefulWidget {
+  const AnimatedBarExample({super.key});
+
   @override
   State<AnimatedBarExample> createState() => _AnimatedBarExampleState();
 }
@@ -41,13 +43,13 @@ class _AnimatedBarExampleState extends State<AnimatedBarExample> {
               'Home',
               style: TextStyle(fontWeight: FontWeight.w400),
             ),
-            selectedColor: Color.fromARGB(255, 69, 161, 218),
+            selectedColor: const Color.fromARGB(255, 69, 161, 218),
           ),
           BottomBarItem(
             icon: const Icon(
               Icons.category_outlined,
             ),
-            selectedColor: Color.fromARGB(255, 69, 161, 218),
+            selectedColor: const Color.fromARGB(255, 69, 161, 218),
             title: const Text('Categories',
                 style: TextStyle(fontWeight: FontWeight.w400)),
           ),
@@ -58,7 +60,7 @@ class _AnimatedBarExampleState extends State<AnimatedBarExample> {
               selectedIcon: const Icon(
                 Icons.style,
               ),
-              selectedColor: Color.fromARGB(255, 69, 161, 218),
+              selectedColor: const Color.fromARGB(255, 69, 161, 218),
               title: const Text('Notification',
                   style: TextStyle(fontWeight: FontWeight.w400))),
           BottomBarItem(
@@ -69,7 +71,7 @@ class _AnimatedBarExampleState extends State<AnimatedBarExample> {
                 Icons.broadcast_on_personal_sharp,
                 color: Color.fromARGB(255, 69, 161, 218),
               ),
-              selectedColor: Color.fromARGB(255, 69, 161, 218),
+              selectedColor: const Color.fromARGB(255, 69, 161, 218),
               title: const Text('Account',
                   style: TextStyle(fontWeight: FontWeight.w400))),
         ],

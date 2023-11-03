@@ -15,24 +15,57 @@ class ProfileSetupProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void saveProfileDataToFirebase(
+  // void saveProfileDataToFirebase(
+  //   String uid, String numb, BuildContext contxt) async {
+  //   String name = nameController.text;
+  //   String mail = mailController.text;
+
+  //   try {
+  //     await FirebaseFirestore.instance.collection('userProfiles').add({
+  //       'ui': uid,
+  //       'name': name,
+  //       'mail': mail,
+  //       'mobile': numb,
+  //       'gender': selectedChip,
+  //     });
+  //     print("Success");
+  //     Navigator.push(contxt, MaterialPageRoute(builder: (context) => AnimatedBarExample(),));
+      
+  //   } catch (error) {
+  //     print(error);
+  //   }
+  // }
+
+   Future<void> saveProfileDataToFirebase(
     String uid, String numb, BuildContext contxt) async {
     String name = nameController.text;
     String mail = mailController.text;
 
     try {
-      await FirebaseFirestore.instance.collection('userProfiles').add({
-        'ui': uid,
-        'name': name,
-        'mail': mail,
-        'mobile': numb,
-        'gender': selectedChip,
-      });
-      print("Success");
-      Navigator.push(contxt, MaterialPageRoute(builder: (context) => AnimatedBarExample(),));
-      
+      // Check if a user profile with the same UID already exists
+      QuerySnapshot existingProfiles = await FirebaseFirestore.instance
+          .collection('userProfiles')
+          .where('ui', isEqualTo: uid)
+          .get();
+
+      if (existingProfiles.docs.isNotEmpty) {
+        // A user profile with the same UID already exists, no need to create a new one.
+        print("User profile already exists.");
+        Navigator.push(contxt, MaterialPageRoute(builder: (context) => AnimatedBarExample()));
+      } else {
+        // User profile doesn't exist, create a new one
+        await FirebaseFirestore.instance.collection('userProfiles').add({
+          'ui': uid,
+          'name': name,
+          'mail': mail,
+          'mobile': numb,
+          'gender': selectedChip,
+        });
+        print("User profile created successfully.");
+        Navigator.push(contxt, MaterialPageRoute(builder: (context) => AnimatedBarExample()));
+      }
     } catch (error) {
-      print(error);
+      print("Error: $error");
     }
   }
 

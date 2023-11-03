@@ -1,13 +1,12 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:medshop/BottomBar.dart';
 import 'package:medshop/auth/profilesetup.dart';
 import 'package:medshop/auth/signIn.dart';
 import 'package:medshop/config/constant.dart';
 import 'package:medshop/widgets/customButton.dart';
-import 'package:medshop/widgets/toast.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
@@ -41,7 +40,7 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   void _startTimer() {
-    const oneSec = const Duration(seconds: 1);
+    const oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
@@ -58,9 +57,37 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 
-  void _onCodeSent(String verificationId) {
+
+void _onCodeSent(String verificationId) async {
+    // Check if a user with the given UID already exists
+    final user = await AuthProvider.checkUserExistsByUID(
+        FirebaseAuth.instance.currentUser!.uid);
+
+    if (user != null) {
+      // User already exists, navigate to the home page
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const AnimatedBarExample()));
+    } else {
+      // User doesn't exist, navigate to the profile setup page
+      // ignore: use_build_context_synchronously
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProfileSetup(
+            uid: FirebaseAuth.instance.currentUser!.uid,
+            numb: widget.number1,
+          ),
+        ),
+      );
+    }
+
     SignIn.verify = verificationId;
   }
+
+
+  // void _onCodeSent(String verificationId) {
+  //   SignIn.verify = verificationId;
+  // }
 
   void _onVerificationFailed(FirebaseAuthException e) {
     print('Phone verification failed: ${e.message}');
@@ -114,7 +141,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           children: [
                             Text(
                               widget.number1,
-                              style: TextStyle(fontSize: 20),
+                              style: const TextStyle(fontSize: 20),
                             ),
                             InkWell(
                               onTap: () {
@@ -194,7 +221,7 @@ class _OtpScreenState extends State<OtpScreen> {
                               "Resend code",
                               style: TextStyle(
                                   color: _secondsRemaining == 0
-                                      ? Color.fromARGB(255, 69, 161, 218)
+                                      ? const Color.fromARGB(255, 69, 161, 218)
                                       : Colors.black),
                             )),
                       const SizedBox(
@@ -244,7 +271,8 @@ class _OtpScreenState extends State<OtpScreen> {
                               );
                             }
                           },
-                          child:  CustomButtom('$verifybtnText',BorderRadius.circular(10)))),
+                          child: CustomButtom(
+                              verifybtnText, BorderRadius.circular(10)))),
                 ],
               ),
             ],

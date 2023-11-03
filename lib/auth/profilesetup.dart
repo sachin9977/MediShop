@@ -5,6 +5,9 @@ import 'package:provider/provider.dart';
 import '../config/constant.dart';
 import '../provider/authProvider/profileProvider.dart';
 import '../widgets/customTextField.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_blur/flutter_blur.dart';
+
 
 class ProfileSetup extends StatefulWidget {
 
@@ -250,5 +253,72 @@ Widget buildChip(ProfileSetupProvider provider, String chipText) {
         ),
       ),
     ),
+  );
+}
+
+void showSuccessDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        child: Stack(
+          children: <Widget>[
+            Blur(
+              colorOpacity: 0.4,
+              gradient: null,
+              blur: 3.0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Icon(
+                    Icons.check_circle,
+                    color: Colors.green,
+                    size: 60,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Success!",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Your action was successful.",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("OK"),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    },
   );
 }

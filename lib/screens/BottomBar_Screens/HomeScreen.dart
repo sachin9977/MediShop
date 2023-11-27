@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lecle_flutter_carousel_pro/lecle_flutter_carousel_pro.dart';
 import 'package:medshop/screens/ProfileScreens/Wishlist.dart';
 import 'package:medshop/widgets/customButton.dart';
@@ -216,13 +217,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             "Order Medicine using \n prescription",
                           ),
                           const SizedBox(height: 12),
-                          Container(
+                          SizedBox(
                               height: 80,
                               width: 160,
                               child: CustomButtom("Order Now",BorderRadius.circular(10)))
                         ],
                       ),
-                      Container(
+                      SizedBox(
                         height: 160,
                         width: 122,
                         // color: Colors.red,
@@ -233,9 +234,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text(
                     "Medicine Categories",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
@@ -250,9 +251,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
 
-              Container(
+              const SizedBox(
                   height: 330,
-                  child: const Category(
+                  child: Category(
                       isListView: false)), // To display as ListView
 
               Container(
@@ -279,13 +280,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             "Order Medicine from previous \n Orders",
                           ),
                           const SizedBox(height: 12),
-                          Container(
+                          SizedBox(
                               height: 80,
                               width: 160,
                               child:  CustomButtom("Order Now",BorderRadius.circular(10)))
                         ],
                       ),
-                      Container(
+                      SizedBox(
                         height: 160,
                         width: 122,
                         // color: Colors.red,
@@ -327,7 +328,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return const CircularProgressIndicator(); // Loading indicator
+                            return const Center(
+                                child: SpinKitSpinningLines(
+                              color: Colors.blue,
+                              size: 50.0,
+                            )); // Loading indicator
                           }
 
                           if (snapshot.hasError) {
@@ -342,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           var documents = snapshot.data!
                               .docs; // Get the list of QueryDocumentSnapshot
 
-                          return Container(
+                          return SizedBox(
                             height: 140,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
@@ -371,7 +376,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      Container(
+                                      SizedBox(
                                         height: 60,
                                         child: Image.network(document['Image']),
                                       ),

@@ -53,19 +53,14 @@ class _ProductDetailState extends State<ProductDetail> {
           FirebaseFirestore.instance.collection('carts').doc(user.uid);
       cartRef.collection('items').add(cartItem);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Added to Cart!'),
         ),
       );
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Cart(),
-          ));
     } else {
       // Handle the case where the user is not authenticated (e.g., show a login/signup prompt).
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Please log in to add items to your cart.'),
         ),
       );
@@ -90,22 +85,22 @@ class _ProductDetailState extends State<ProductDetail> {
           },
         ),
         title:
-            Text("Product Detail", style: const TextStyle(color: Colors.black)),
+            const Text("Product Detail", style: TextStyle(color: Colors.black)),
         actions: [
           InkWell(
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Cart(),
+                    builder: (context) => const Cart(),
                   ));
             },
-            child: Icon(
+            child: const Icon(
               Icons.shopping_basket,
               color: Color.fromARGB(255, 177, 69, 61),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 20,
           )
         ],

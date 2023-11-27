@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:medshop/screens/ProfileScreens/myAddress.dart';
 
 class Cart extends StatefulWidget {
@@ -35,8 +36,8 @@ class _CartState extends State<Cart> {
             Container(
                 width: MediaQuery.of(context).size.width / 2,
                 height: 60,
-                color: Color.fromARGB(255, 187, 175, 174),
-                child: Center(
+                color: const Color.fromARGB(255, 187, 175, 174),
+                child: const Center(
                   child: Text("Rs 100",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
@@ -45,13 +46,13 @@ class _CartState extends State<Cart> {
               onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyAddress(),
+                    builder: (context) => const MyAddress(),
                   )),
               child: Container(
                 height: 60,
                 width: MediaQuery.of(context).size.width / 2,
                 color: Colors.green,
-                child: Center(
+                child: const Center(
                     child: Text(
                   "Proceed",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -79,7 +80,12 @@ class _CartState extends State<Cart> {
 
         builder: (context, AsyncSnapshot<QuerySnapshot?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: Center(
+                    child: SpinKitSpinningLines(
+              color: Colors.blue,
+              size: 50.0,
+            )));
           }
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
@@ -221,7 +227,7 @@ class _CartState extends State<Cart> {
                               const SizedBox(
                                 width: 8,
                               ),
-                              Container(
+                              SizedBox(
                                 height: 35,
                                 child: ElevatedButton(
                                 
@@ -238,8 +244,12 @@ class _CartState extends State<Cart> {
                                           .collection('items')
                                           .doc(cartItemId)
                                           .delete();
-
+                                        
                                       // Refresh the UI by rebuilding the widget
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text('Item Removed'),
+                                      ));
                                       setState(() {});
                                     }
                                   },

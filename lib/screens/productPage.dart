@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:medshop/screens/productDetail.dart';
 import 'package:medshop/widgets/customButton.dart';
 
@@ -214,8 +215,10 @@ void showBottomSheet(BuildContext context, prod) {
       ),
       body: isLoading
           ? const Center(
-              child: CircularProgressIndicator(),
-            )
+                child: SpinKitSpinningLines(
+              color: Colors.blue,
+              size: 50.0,
+            ))
           : GridView.builder(
               itemCount: maindata.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

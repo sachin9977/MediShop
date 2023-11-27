@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../screens/Cart.dart';
 import 'customButton.dart';
 
 class CounterBottomSheet extends StatefulWidget {
@@ -10,8 +9,9 @@ class CounterBottomSheet extends StatefulWidget {
   final Function(int) onCounterChanged;
   final Map<String, dynamic> prod; // Add prod parameter
 
-  CounterBottomSheet(
-      {required this.initialCounter,
+  const CounterBottomSheet(
+      {super.key,
+      required this.initialCounter,
       required this.onCounterChanged,
       required this.prod});
 
@@ -70,11 +70,6 @@ class _CounterBottomSheetState extends State<CounterBottomSheet> {
           content: Text('Added to Cart!'),
         ),
       );
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const Cart(),
-          ));
     } else {
       // Handle the case where the user is not authenticated (e.g., show a login/signup prompt).
       ScaffoldMessenger.of(context).showSnackBar(

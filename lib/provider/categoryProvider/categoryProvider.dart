@@ -11,18 +11,18 @@ class CategoryProvider extends ChangeNotifier {
         .collection('CategoryCollection')
         .get()
         .then((value) {
-      value.docs.forEach((element) {
+      for (var element in value.docs) {
         FirebaseFirestore.instance
             .collection('CategoryCollection')
             .doc(element.id)
             .collection('CardiacCollection')
             .get()
             .then((subColl) {
-          subColl.docs.forEach((element) {
+          for (var element in subColl.docs) {
             print(element.id);
-          });
+          }
         });
-      });
+      }
     });
   }
 

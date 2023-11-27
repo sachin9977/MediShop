@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pay/pay.dart';
 
 class Payment extends StatefulWidget {
@@ -48,7 +48,11 @@ class _PaymentState extends State<Payment> {
             print(result.toString());
           },
           loadingIndicator: const Center(
-            child: CircularProgressIndicator(),
+              child: Center(
+                  child: SpinKitSpinningLines(
+                color: Colors.blue,
+                size: 50.0,
+              )),
           ),
         ),
         ],

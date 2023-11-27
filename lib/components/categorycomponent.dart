@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:medshop/screens/productPage.dart';
 import '../../provider/categoryProvider/categoryProvider.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Category extends StatefulWidget {
   final bool isListView; // Add a parameter to specify layout type
@@ -29,7 +30,11 @@ class _CategoryState extends State<Category> {
         stream: _categoryProvider.categoryStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: SpinKitSpinningLines(
+              color: Colors.blue,
+              size: 50.0,
+            ));
           }
 
           if (snapshot.hasError) {
